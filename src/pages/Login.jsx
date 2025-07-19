@@ -93,7 +93,7 @@ export default function Login() {
         <h2 className="text-xl font-bold mb-4">
           {isArabic ? 'تسجيل الدخول إلى' : 'Login to'}{' '}
           <span className="text-blue-600">
-            {isArabic ? 'تصفية للعطور' : 'hatim'}
+            {isArabic ? 'تصفية للعطور' : 'Tassfya'}
           </span>
         </h2>
 

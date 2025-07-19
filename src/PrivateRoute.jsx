@@ -1,10 +1,22 @@
-// src/PrivateRoute.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
-const PrivateRoute = ({ children }) => {
-  const user = localStorage.getItem('user');
-  return user ? children : <Navigate to="/login" />;
-};
+export default function PrivateRoute({ children }) {
+  const [loading, setLoading] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
 
-export default PrivateRoute;
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setAuthenticated(!!user);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+
+  return authenticated ? children : <Navigate to="/login" />;
+}

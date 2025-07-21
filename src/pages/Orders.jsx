@@ -68,15 +68,37 @@ export default function Orders() {
     }));
   };
 
-  const handleUpdate = () => {
-    setUpdating(true);
-    const updated = orders.map(order =>
-      order.Order_ID === selectedOrder.Order_ID ? selectedOrder : order
-    );
-    setOrders(updated);
-    setSelectedOrder(null);
+  const handleUpdate = async () => {
+  setUpdating(true);
+  try {
+    const response = await fetch('https://script.google.com/macros/s/AKfycbzQKk3ZB5Ewzq5cgs_0dzmnC6vOA8dthwc0AD1xvSXGwbAI_8QAqR9c8BDDuVFMJj186w/exec', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(selectedOrder),
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      alert('✅ Updated in Google Sheets');
+
+      // تحديث داخل الموقع فقط
+      const updated = orders.map(order =>
+        order.Order_ID === selectedOrder.Order_ID ? selectedOrder : order
+      );
+      setOrders(updated);
+      setSelectedOrder(null);
+    } else {
+      alert('❌ Failed to update Google Sheets');
+    }
+  } catch (err) {
+    console.error('Error:', err);
+    alert('❌ Error occurred while updating');
+  } finally {
     setUpdating(false);
-  };
+  }
+};
 
   return (
     <PrivateRoute>

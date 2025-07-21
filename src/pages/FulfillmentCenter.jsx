@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { LanguageContext } from '../context/LanguageContext';
+import PrivateRoute from '../PrivateRoute'; // أو './PrivateRoute' حسب مكان الملف
 
 export default function FulfillmentCenter() {
   const { lang } = useContext(LanguageContext);
@@ -12,6 +13,7 @@ export default function FulfillmentCenter() {
   }, []);
 
   return (
+      <PrivateRoute>
     <div dir={isArabic ? 'rtl' : 'ltr'} className="p-6">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
         {isArabic ? 'مركز تنفيذ الطلبات' : 'Fulfillment Center'}
@@ -47,5 +49,6 @@ export default function FulfillmentCenter() {
         </table>
       </div>
     </div>
+    </PrivateRoute>
   );
 }

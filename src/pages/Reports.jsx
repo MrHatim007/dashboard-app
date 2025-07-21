@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { LanguageContext } from '../context/LanguageContext';
 import { Doughnut, Line } from 'react-chartjs-2';
+import PrivateRoute from '../PrivateRoute'; // أو './PrivateRoute' حسب مكان الملف
 import {
   Chart as ChartJS,
   ArcElement,
@@ -87,6 +88,7 @@ export default function Reports() {
   };
 
   return (
+      <PrivateRoute>
     <div dir={isArabic ? 'rtl' : 'ltr'} className="p-6">
       <h1 className="text-2xl font-bold mb-4 text-gray-800">
         {isArabic ? 'التقارير' : 'Reports'}
@@ -159,6 +161,7 @@ export default function Reports() {
         </div>
       </div>
     </div>
+    </PrivateRoute>
   );
 }
 

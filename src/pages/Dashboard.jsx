@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { LanguageContext } from '../context/LanguageContext';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
+import PrivateRoute from '../PrivateRoute'; // أو './PrivateRoute' حسب مكان الملف
 
 const STATUS_ORDER = [
   'Total Orders',
@@ -120,9 +121,10 @@ export default function Dashboard() {
 
   const totalOrders = filtered.length;
   const totalRevenue = filtered.reduce((sum, o) => sum + o.revenue, 0);
-
+//hatim
   return (
-    <div dir={isArabic ? 'rtl' : 'ltr'} className="p-6">
+      <PrivateRoute>
+    <div dir={isArabic ? 'rtl' : 'ltr'} className="p-4 sm:p-6 max-w-7xl mx-auto">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
         {isArabic ? 'لوحة التحكم' : 'Dashboard'}
       </h1>
@@ -132,58 +134,60 @@ export default function Dashboard() {
       ) : (
         <>
           {/* Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-            <select
-              onChange={(e) =>
-                setFilters({ ...filters, status: e.target.value })
-              }
-              value={filters.status}
-              className="p-2 border rounded"
-            >
-              <option value="">
-                {isArabic ? 'كل الحالات' : 'All Statuses'}
-              </option>
-              {Object.entries(STATUS_KEYS).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-            <select
-              onChange={(e) =>
-                setFilters({ ...filters, location: e.target.value })
-              }
-              value={filters.location}
-              className="p-2 border rounded"
-            >
-              <option value="">{isArabic ? 'كل المدن' : 'All Cities'}</option>
-              {[...new Set(orders.map((o) => o.location))].map((loc) => (
-                <option key={loc}>{loc}</option>
-              ))}
-            </select>
-            <input
-              type="date"
-              className="p-2 border rounded"
-              value={filters.dateFrom}
-              onChange={(e) =>
-                setFilters({ ...filters, dateFrom: e.target.value })
-              }
-            />
-            <input
-              type="date"
-              className="p-2 border rounded"
-              value={filters.dateTo}
-              onChange={(e) =>
-                setFilters({ ...filters, dateTo: e.target.value })
-              }
-            />
-            <button
-              onClick={resetFilters}
-              className="bg-gray-300 hover:bg-gray-400 text-sm px-4 py-2 rounded"
-            >
-              {isArabic ? 'تصفير الفلاتر' : 'Reset Filters'}
-            </button>
-          </div>
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6 p-4 bg-white rounded-xl shadow-md border">
+  <select
+    onChange={(e) =>
+      setFilters({ ...filters, status: e.target.value })
+    }
+    value={filters.status}
+    className="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+  >
+    <option value="">{isArabic ? 'كل الحالات' : 'All Statuses'}</option>
+    {Object.entries(STATUS_KEYS).map(([value, label]) => (
+      <option key={value} value={value}>
+        {label}
+      </option>
+    ))}
+  </select>
+
+  <select
+    onChange={(e) =>
+      setFilters({ ...filters, location: e.target.value })
+    }
+    value={filters.location}
+    className="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+  >
+    <option value="">{isArabic ? 'كل المدن' : 'All Cities'}</option>
+    {[...new Set(orders.map((o) => o.location))].map((loc) => (
+      <option key={loc}>{loc}</option>
+    ))}
+  </select>
+
+  <input
+    type="date"
+    className="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    value={filters.dateFrom}
+    onChange={(e) =>
+      setFilters({ ...filters, dateFrom: e.target.value })
+    }
+  />
+
+  <input
+    type="date"
+    className="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    value={filters.dateTo}
+    onChange={(e) =>
+      setFilters({ ...filters, dateTo: e.target.value })
+    }
+  />
+
+  <button
+    onClick={resetFilters}
+    className="text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 transition px-4 py-2 rounded-lg shadow-md font-medium"
+  >
+    {isArabic ? 'تصفير الفلاتر' : 'Reset Filters'}
+  </button>
+</div>
 
           {/* Ordered Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -227,6 +231,7 @@ export default function Dashboard() {
         </>
       )}
     </div>
+    </PrivateRoute>
   );
 }
 

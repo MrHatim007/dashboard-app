@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { LanguageContext } from '../context/LanguageContext';
 import { db } from '../firebase';
+import PrivateRoute from '../PrivateRoute'; // أو './PrivateRoute' حسب مكان الملف
 import {
   collection,
   addDoc,
@@ -91,6 +92,7 @@ export default function Settings() {
   };
 
   return (
+      <PrivateRoute>
     <div
       dir={isArabic ? 'rtl' : 'ltr'}
       className="p-6 max-w-4xl mx-auto space-y-8"
@@ -292,5 +294,6 @@ export default function Settings() {
         <p className="text-green-600 text-center font-semibold">{message}</p>
       )}
     </div>
+    </PrivateRoute>
   );
 }

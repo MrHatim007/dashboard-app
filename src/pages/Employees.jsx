@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { LanguageContext } from '../context/LanguageContext';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import PrivateRoute from '../PrivateRoute'; // أو './PrivateRoute' حسب مكان الملف
 import {
   collection,
   doc,
@@ -186,6 +187,7 @@ export default function Employees() {
   };
 
   return (
+      <PrivateRoute>
     <div dir={isArabic ? 'rtl' : 'ltr'} className="p-6">
       <h1 className="text-2xl font-bold mb-4 text-gray-800">
         {isArabic ? 'الموظفون' : 'Employees'}
@@ -343,5 +345,6 @@ export default function Employees() {
         </>
       )}
     </div>
+    </PrivateRoute>
   );
 }

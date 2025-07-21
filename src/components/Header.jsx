@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { LanguageContext } from '../context/LanguageContext';
 import { useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
 
 export default function Header() {
   const { lang, setLang } = useContext(LanguageContext);
   const isArabic = lang === 'ar';
   const navigate = useNavigate();
-
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -16,8 +17,15 @@ export default function Header() {
     }
   }, []);
 
-  const handleLogout = () => {
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await signOut(auth); // ⛔ تسجيل خروج من Firebase
+      localStorage.removeItem('user'); // 🗑️ حذف بيانات المستخدم
+      setUser(null); // 🧹 تحديث الحالة الداخلية
+      navigate('/login'); // ⏩ توجيه إلى صفحة تسجيل الدخول
+    } catch (error) {
+      console.error('فشل تسجيل الخروج:', error.message);
+    }
   };
 
   return (
@@ -30,7 +38,7 @@ export default function Header() {
         {isArabic ? 'تسجيل الخروج' : 'Logout'}
       </button>
 
-      {/* الترحيب */}
+      {/* رسالة الترحيب */}
       <span className="font-bold text-lg mx-auto">
         {user ? (
           <>

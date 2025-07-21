@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { LanguageContext } from '../context/LanguageContext';
+import PrivateRoute from '../PrivateRoute'; // أو './PrivateRoute' حسب مكان الملف
 
 export default function AdCalculator() {
   const { lang } = useContext(LanguageContext);
@@ -55,6 +56,7 @@ export default function AdCalculator() {
   };
 
   return (
+    <PrivateRoute>
     <div dir={isArabic ? 'rtl' : 'ltr'} className="p-6 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
         {isArabic ? 'تحليل أداء الإعلانات' : 'Ad Spending Analysis'}
@@ -186,5 +188,6 @@ export default function AdCalculator() {
         </div>
       )}
     </div>
+    </PrivateRoute>
   );
 }

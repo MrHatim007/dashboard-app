@@ -71,29 +71,26 @@ export default function Orders() {
   const handleUpdate = async () => {
   setUpdating(true);
   try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbzQKk3ZB5Ewzq5cgs_0dzmnC6vOA8dthwc0AD1xvSXGwbAI_8QAqR9c8BDDuVFMJj186w/exec', {
+    const response = await fetch('https://script.google.com/macros/s/AKfycbzS_tpYp9AgOxbvAUCEO39_hthLUZ0IYaB4PcPp5SF5fSCxEGo2s_hgbCd1Hkwsuk5IGw/exec', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(selectedOrder),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(selectedOrder)
     });
 
     const result = await response.json();
     if (result.success) {
-      alert('✅ Updated in Google Sheets');
+      alert('✅ Order updated in Google Sheets');
 
-      // تحديث داخل الموقع فقط
       const updated = orders.map(order =>
         order.Order_ID === selectedOrder.Order_ID ? selectedOrder : order
       );
       setOrders(updated);
       setSelectedOrder(null);
     } else {
-      alert('❌ Failed to update Google Sheets');
+      alert('❌ Google Sheets update failed: ' + (result.error || ''));
     }
-  } catch (err) {
-    console.error('Error:', err);
+  } catch (error) {
+    console.error('Update error:', error);
     alert('❌ Error occurred while updating');
   } finally {
     setUpdating(false);

@@ -71,27 +71,26 @@ export default function Orders() {
   const handleUpdate = async () => {
   setUpdating(true);
   try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbzS_tpYp9AgOxbvAUCEO39_hthLUZ0IYaB4PcPp5SF5fSCxEGo2s_hgbCd1Hkwsuk5IGw/exec', {
+    const res = await fetch('https://dashboard-app-g3yh.onrender.com/api/orders/update', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(selectedOrder)
+      body: JSON.stringify(selectedOrder),
     });
 
-    const result = await response.json();
+    const result = await res.json();
     if (result.success) {
-      alert('✅ Order updated in Google Sheets');
-
+      alert('✅ Order updated!');
       const updated = orders.map(order =>
         order.Order_ID === selectedOrder.Order_ID ? selectedOrder : order
       );
       setOrders(updated);
       setSelectedOrder(null);
     } else {
-      alert('❌ Google Sheets update failed: ' + (result.error || ''));
+      alert('❌ Failed to update.');
     }
   } catch (error) {
-    console.error('Update error:', error);
-    alert('❌ Error occurred while updating');
+    console.error(error);
+    alert('❌ Error occurred.');
   } finally {
     setUpdating(false);
   }
